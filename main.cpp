@@ -4,11 +4,6 @@
 #include "IRobot.h"
 
 
-/*
- * 
- */
-
-
 int main() {
     std::thread env(environmentRun);
     std::thread robot(irobotRun);
