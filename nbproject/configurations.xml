@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="95">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+      <itemPath>Env.h</itemPath>
+      <itemPath>Goniec.h</itemPath>
+      <itemPath>IRobot.h</itemPath>
+      <itemPath>Skoczek.h</itemPath>
+      <itemPath>Utils.h</itemPath>
+      <itemPath>Wieza.h</itemPath>
+      <itemPath>main.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ResourceFiles"
+                   displayName="Resource Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <itemPath>Env.cpp</itemPath>
+      <itemPath>Goniec.cpp</itemPath>
+      <itemPath>IRobot.cpp</itemPath>
+      <itemPath>Skoczek.cpp</itemPath>
+      <itemPath>Utils.cpp</itemPath>
+      <itemPath>Wieza.cpp</itemPath>
+      <itemPath>main.cpp</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <ccTool>
+          <commandLine>-std=c++11 -pthread</commandLine>
+        </ccTool>
+        <linkerTool>
+          <linkerLibItems>
+            <linkerOptionItem>`pkg-config --libs ncurses`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </compileType>
+      <item path="Env.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Env.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Goniec.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Goniec.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="IRobot.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="IRobot.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Skoczek.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Skoczek.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Utils.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Utils.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Wieza.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Wieza.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="main.h" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+    <conf name="Release" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+      </compileType>
+      <item path="Env.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Env.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Goniec.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Goniec.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="IRobot.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="IRobot.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Skoczek.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Skoczek.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Utils.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Utils.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Wieza.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Wieza.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="main.h" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>
