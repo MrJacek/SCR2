@@ -15,16 +15,17 @@
 #include <netdb.h>      // Needed for the socket functions
 #include <sys/un.h>
 
-char** getBoard(int);
-bool move(int fd,char axisY,char axisX);
 const char ASK_BOARD[]={'B'};
 const char ASK_MOVE[]={'M'};
-void refresh2();
+const char MOVE_ACCEPTED = '1';
+const char MOVE_DENIED = '0';
 
+char** getBoard(int);
+bool move(int fd,char axisY,char axisX);
+void refresh2();
 int createClient();
 void writeBoardToBuffor(char** board, char* buffor);
 void printBoard(char** board,const char* name);
-
 
 #endif	/* UTILS_H */
 

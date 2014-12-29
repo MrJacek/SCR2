@@ -14,10 +14,10 @@ bool move(int fd, char axisY, char axisX) {
     }
     std::cout << "Send move request\n";
     if ((rc = read(fd, responseBuf, 1)) > 0) {
-        std::cout << "Recevie move request response\n";
+        std::cout << "Receive move request response\n";
         return responseBuf[0] == '1';
-
     }
+    
     return false;
 }
 
