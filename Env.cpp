@@ -43,18 +43,25 @@ int createServerSocket() {
     }
 }
 
+/**
+ * Funkcja obsługi klienta wykonowyna w oddzielnym wątku dla każdego socketa
+ * @param sock deskryptor socketa
+ * @param board wskaznik na stan szachownicy
+ */
 void clientIncomming(int sock, char** board) {
     int rc;
     char buf[3];
     char boardBuf[64];
 
+    //przepisanie stanu szachownicy na liniowy bufor
     writeBoardToBuffor(board, boardBuf);
-
     std::cout << boardBuf << "end" << "\n";
 
-    std::cout << "Empty thread for: " << sock << "\n";
+    //obsluga żądania klienta
+    std::cout << "Empty thread for: " << sock << "\n";    
     while ((rc = read(sock, buf, sizeof (buf))) > 0) {
         printf("read %u bytes: %.*s\n", rc, rc, buf);
+        //pytanie o stan szachownicy - odbrany tylko char B, dwa pozostale bez znaczenia
         if (buf[0] == ASK_BOARD[0]) {
             std::cout << "Get board" << "\n";
             if (write(sock, boardBuf, sizeof (boardBuf)) != sizeof (boardBuf)) {
@@ -66,6 +73,7 @@ void clientIncomming(int sock, char** board) {
             }
             std::cout << "Write board:" << sock << "\n";
         }
+        //prosba o ruch - odebrane M oraz nowe wspolrzedne, np: M13
         if (buf[0] == 'M') {
             std::cout << "Ask for move: [" << buf[1] << "," << buf[2] << "]\n";
 
