@@ -7,7 +7,7 @@ void irobotRun() {
     char currentY = '0';
     
     //utworzenie polaczenia z srodowiskiem
-    int df = createClient();
+    int df = createClient(TYPE_ENEMY); //testowo ENEMY, IRobot powinien mieć HERO
     
     //pobranie pozycji poczatkowej
     int* position = getInitialPosition(df);

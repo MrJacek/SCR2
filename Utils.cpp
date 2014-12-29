@@ -23,7 +23,12 @@ bool move(int fd, char oldY, char oldX, char axisY, char axisX) {
     return false;
 }
 
-int createClient() {
+/**
+ * Utworzenie klienta.
+ * @param type typ robota, H - Hero, E - enemy.
+ * @return deskrpytor socketu.
+ */
+int createClient(char type) {
     struct sockaddr_un addr;
     char buf[100];
     int fd, rc;
@@ -38,6 +43,13 @@ int createClient() {
         perror("connect error");
         exit(-1);
     }
+    
+    //zarejestorwanie z typem
+    if (write(fd, &type, 1) != 1) {
+        perror("write error");
+        exit(-1);
+    }
+    
     return fd;
 }
 

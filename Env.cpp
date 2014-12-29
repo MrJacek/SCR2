@@ -55,20 +55,35 @@ int createServerSocket() {
  * @param sock deskryptor socketa
  */
 void clientIncomming(int sock) {
+    char type;
     int rc;
     char buf[5];
     char boardBuf[64];
 
     std::cout << "Env: " << sock << ": " << "New service thread created!\n";
+    //jaki typ bota się zarejestrował
+    if (read(sock, &type, 1) > 0) {
+        std::cout << "Env: " << sock << ": " << "Client type = [" << type << "] registered!\n";
+    }
+    
+    if (type == 'E') {
+        //typ enemy
+        //losowa pozycja poczatkowa (z wyjatkiem [0,0])
+        int* initialPos = new int[2];
+        randomInitialPosition(initialPos);
+        std::cout << "Env: " << sock << ": " << "Generated initial position = [" << initialPos[0] << ", " << initialPos[1] << "]!\n";
 
-    //losowa pozycja poczatkowa (z wyjatkiem [0,0])
-    int* initialPos = new int[2];
-    randomInitialPosition(initialPos);
-    std::cout << "Env: " << sock << ": " << "Generated initial position = [" << initialPos[0] << ", " << initialPos[1] << "]!\n";
-
-    if (write(sock, &(*initialPos), 2 * sizeof (int)) != 2 * sizeof (int)) {
-        perror("Initial position socket write error");
-        exit(-1);
+        if (write(sock, &(*initialPos), 2 * sizeof (int)) != 2 * sizeof (int)) {
+            perror("Initial position socket write error");
+            exit(-1);
+        }
+    } else {
+        //typ hero
+        //<!-- CRITICAL SECTION
+            board_state_mutex.lock();
+            board[0][0] == '0';
+            board_state_mutex.unlock();
+        //-->
     }
 
     while ((rc = read(sock, buf, sizeof (buf))) > 0) {
