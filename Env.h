@@ -9,8 +9,10 @@
 #define	ENV_H
 
 #include "Utils.h"
+#include <mutex>
 void environmentRun();
-void clientIncomming(int sock,char** board);
+void clientIncomming(int sock);
 int createServerSocket();
+bool moveAccepted(int targetX, int targetY);
 #endif	/* ENV_H */
 
