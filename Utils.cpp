@@ -1,14 +1,16 @@
 #include "Utils.h"
 
-bool move(int fd, char axisY, char axisX) {
-    char buf[3];
+bool move(int fd, char oldY, char oldX, char axisY, char axisX) {
+    char buf[5];
     char responseBuf[1];
     int rc;
     buf[0] = 'M';
-    buf[1] = axisY;
-    buf[2] = axisX;
+    buf[1] = oldY;
+    buf[2] = oldX;
+    buf[3] = axisY;
+    buf[4] = axisX;
     std::cout << "Prepare move request\n";
-    if (write(fd, buf, 3) != 3) {
+    if (write(fd, buf, 5) != 5) {
         perror("write error");
         exit(-1);
     }
@@ -39,6 +41,21 @@ int createClient() {
     return fd;
 }
 
+/**
+ * Funkcja pobiera polozenie poczatkowe figury.
+ * @param fd deskryptor socketu
+ * @return wskaznik na pierwszy element dwuelementowej tablicy wspolrzednych [Y,X]
+ */
+int* getInitialPosition(int fd) {
+    int* responseBuf = new int[2];
+    int rc;
+    
+    if ((rc = read(fd, responseBuf, 2*sizeof(int))) > 0) {
+        std::cout << "Client: " << fd << ": " << "Received initial position\n";
+        return &responseBuf[0];
+    }
+}
+
 char** getBoard(int fd) {
     int rc;
     char buf[100];
@@ -48,14 +65,14 @@ char** getBoard(int fd) {
         board[i] = new char[8];
     }
 
-    std::cout << "Ask for board: " << fd << "\n";
+    std::cout << "Client: " << fd << ": " << "Ask for board: " << fd << "\n";
     if (write(fd, ASK_BOARD, 1) != 1) {
         perror("write error");
         exit(-1);
     }
-    std::cout << "Wait for board: " << fd << "\n";
+    std::cout << "Client: " << fd << ": " << "Wait for board: " << fd << "\n";
     if ((rc = read(fd, buf, 64)) > 0) {
-        std::cout << "Recive board.\n";
+        std::cout << "Client: " << fd << ": " << "Recive board.\n";
         int shift = 0;
         for (int y = 0; y < 8; y++) {
             for (int x = 0; x < 8; x++) {

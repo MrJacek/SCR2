@@ -21,11 +21,12 @@ const char MOVE_ACCEPTED = '1';
 const char MOVE_DENIED = '0';
 
 char** getBoard(int);
-bool move(int fd,char axisY,char axisX);
+bool move(int fd, char oldY, char oldX, char axisY, char axisX);
 void refresh2();
 int createClient();
 void writeBoardToBuffor(char** board, char* buffor);
 void printBoard(char** board,const char* name);
+int* getInitialPosition(int fd);
 
 #endif	/* UTILS_H */
 

@@ -10,9 +10,12 @@
 
 #include "Utils.h"
 #include <mutex>
+#include <random>
+
 void environmentRun();
 void clientIncomming(int sock);
 int createServerSocket();
-bool moveAccepted(int targetX, int targetY);
+bool moveAccepted(int oldX, int oldY, int targetX, int targetY);
+void randomInitialPosition(int array[]);
 #endif	/* ENV_H */
 

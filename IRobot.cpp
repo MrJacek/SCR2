@@ -3,18 +3,27 @@
 
 void irobotRun() {
     sleep(1);
+    char currentX = '0';
+    char currentY = '0';
+    
+    //utworzenie polaczenia z srodowiskiem
     int df = createClient();
     
-    //przydala by sie jakaś pętla?
+    //pobranie pozycji poczatkowej
+    int* position = getInitialPosition(df);
+    currentY = (char) *position + 48;
+    currentX = (char) *(position + 1) + 48;
+    
+    //pewnie przydala by sie jakaś pętla...
     char** board = getBoard(df);
     printBoard(board, "IRobot");
-    bool accepted = move(df, '1', '3');
-    
+    bool accepted = move(df, currentY, currentX, '1', '3');
+
     if (accepted) {
-        //zrobić coś dalej
+        //zaktualizować obecną pozycję        
     } else {
        //zrobić coś innego
     }
-    
+  
     return;
 }
