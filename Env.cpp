@@ -65,13 +65,14 @@ void clientIncomming(int sock) {
         if (buf[0] == ASK_BOARD[0]) {
             std::cout << "Get board" << "\n";
 
-            //przepisanie stanu szachownicy na liniowy bufor
-            writeBoardToBuffor(board, boardBuf);
-            std::cout << boardBuf << "end" << "\n";
-
             //odpowiedź - stan szachownicy
             //<!-- CRITICAL SECTION
             board_state_mutex.lock();
+            
+            //przepisanie stanu szachownicy na liniowy bufor
+            writeBoardToBuffor(board, boardBuf);
+            std::cout << boardBuf << "end" << "\n";
+            
             if (write(sock, boardBuf, sizeof (boardBuf)) != sizeof (boardBuf)) {
                 if (64 > 0) fprintf(stderr, "partial write");
                 else {
@@ -80,6 +81,7 @@ void clientIncomming(int sock) {
                 }
             }
             std::cout << "Write board:" << sock << "\n";
+            
             board_state_mutex.unlock();
             //-->
         }
@@ -111,7 +113,7 @@ void clientIncomming(int sock) {
             board_state_mutex.unlock();
             //-->
 
-            if (badCoord && accepted) {
+            if (!badCoord && accepted) {
                 std::cout << "Move accepted\n";
                 status = MOVE_ACCEPTED;
             }

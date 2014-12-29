@@ -82,7 +82,6 @@ void writeBoardToBuffor(char** board, char* buffor) {
             buffor[x + shift] = board[y][x];
         }
         shift += 8;
-
     }
 }
 
