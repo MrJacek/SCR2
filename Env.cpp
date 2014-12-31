@@ -81,7 +81,7 @@ void clientIncomming(int sock) {
         //typ hero
         //<!-- CRITICAL SECTION
             board_state_mutex.lock();
-            board[0][0] == '0';
+            board[0][0] = '0';
             board_state_mutex.unlock();
         //-->
     }

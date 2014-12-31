@@ -1,5 +1,7 @@
 #include "Utils.h"
 
+std::random_device rdU;
+
 bool move(int fd, char oldY, char oldX, char axisY, char axisX) {
     char buf[5];
     char responseBuf[1];
@@ -102,6 +104,10 @@ char** getBoard(int fd) {
         close(fd);
     }
     return board;
+}
+
+char getPawn(int) {
+    return rdU() % 6;
 }
 
 void writeBoardToBuffor(char** board, char* buffor) {

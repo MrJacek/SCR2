@@ -7,7 +7,6 @@
 int main() {
     std::thread env(environmentRun);
     std::thread robot(irobotRun);
-    std::thread robot2(irobotRun);
 
     
     std::cout << "main, foo and bar now execute concurrently...\n";
