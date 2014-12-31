@@ -34,8 +34,9 @@ void irobotRun() {
         bool accepted = isMove && move(df, currentY+0x30, currentX+0x30, nextY+0x30, nextX+0x30);
 
         if (isMove && accepted) {
-            printf("iRobot: Like %s: %c%d -> %c%d\n", PAWNS[pawn], currentY + 'A', currentX, nextY + 'A', nextX);
-            printBoard(board, "IRobot");
+            board = getBoard(df);
+            printf("iRobot: Like %s: %c%d -> %c%d\n", PAWNS[pawn], currentY + 'A', currentX+1, nextY + 'A', nextX+1);
+            printBoard(board, "IRobot", currentX, currentY, nextX, nextY);
 
             //zaktualizować obecną pozycję
             currentX = nextX;

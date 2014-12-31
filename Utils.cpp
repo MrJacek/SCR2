@@ -120,14 +120,36 @@ void writeBoardToBuffor(char** board, char* buffor) {
     }
 }
 
-void printBoard(char** board, const char* name) {
-    std::cout << "Thread: " << name << "\nBoard:\n";
-    for (int y = 0; y < 8; y++) {
-        for (int x = 0; x < 8; x++) {
-            std::cout << board[y][x];
+//gdzieś jest błąd przy wpisywaniu danych, jak się go naprawi to będzie można przemienić x i y w pętli
+void printBoard(char** board, const char* name, char prevX, char prevY, char nextX, char nextY) {
+    std::cout << "Thread: " << name << "\nBoard:\n"
+        << " |12345678| \n"
+        << "-+--------+-\n";
+
+    for (int x = 7; x >= 0; x--) {
+        std::cout << (char)((char)x+'A') << '|';
+
+        for (int y = 0; y < 8; y++) {
+            std::string prefix = "";
+            std::string sufix = "";
+
+            if (x == prevX && y == prevY) {
+                prefix = "\e[1;31m"; //czerwony znak
+                sufix = "\e[0m";
+            } else if (x == nextX && y == nextY) {
+                prefix = "\e[1;32m"; //zielony znak
+                sufix = "\e[0m";
+            }
+
+            std::cout << prefix << board[y][x] << sufix;        
         }
-        std::cout << "\n";
+
+        std::cout << "|" << (char)((char)x+'A') << "\n";
     }
+
+    std::cout
+        << "-+--------+-\n"
+        << " |12345678| \n";
 }
 
 void refresh2() {

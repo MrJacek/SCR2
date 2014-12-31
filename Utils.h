@@ -36,7 +36,7 @@ bool move(int fd, char oldY, char oldX, char axisY, char axisX);
 void refresh2();
 int createClient(char type);
 void writeBoardToBuffor(char** board, char* buffor);
-void printBoard(char** board,const char* name);
+void printBoard(char** board,const char* name, char prevX, char prevY, char nextX, char nextY);
 int* getInitialPosition(int fd);
 
 #endif	/* UTILS_H */
