@@ -104,10 +104,27 @@ bool calculateMove(char **board, char pawn, char currentX, char currentY, char &
                 bestY = currentY;
             }
             break;
-        case PAWN_QUEEN://todo
+        case PAWN_QUEEN:
+            calculateDiagonal(board, currentX, currentY, nextX, nextY, bestDistance, bestX, bestY);
+            calculateHorizontal(board, currentX, currentY, nextX, nextY, bestDistance, bestX, bestY);
+            calculateVertical(board, currentX, currentY, nextX, nextY, bestDistance, bestX, bestY);
+            break;
         case PAWN_ROOK:
+            calculateHorizontal(board, currentX, currentY, nextX, nextY, bestDistance, bestX, bestY);
+            calculateVertical(board, currentX, currentY, nextX, nextY, bestDistance, bestX, bestY);
+            break;
         case PAWN_BISHOP:
+            calculateDiagonal(board, currentX, currentY, nextX, nextY, bestDistance, bestX, bestY);
+            break;
         case PAWN_KNIGHT:
+            //tylko dwa skoki konia mogą polepszyć sprawę
+            if (testMove(board, currentX+2, currentY+1, nextX, nextY)) {
+                bestX = currentX + 2;
+                bestY = currentY + 1;
+            } else if (testMove(board, currentX+1, currentY+2, nextX, nextY)) {
+                bestX = currentX + 1;
+                bestY = currentY + 2;
+            }
             break;
         case PAWN_PAWN:
             if (testMove(board, currentX, currentY+1, nextX, nextY)) {
@@ -128,8 +145,64 @@ bool calculateMove(char **board, char pawn, char currentX, char currentY, char &
     return false;
 }
 
+void calculateDiagonal(char **board, char currentX, char currentY,
+        char badX, char badY,
+        char &bestDistance, char &bestX, char &bestY
+) {
+    for (char i=1; i<8; i++) {
+        if (++currentX > 7 || ++currentY > 7) {
+            break;
+        }
+
+        if (testMove(board, currentX, currentY, badX, badY)) {
+            char newDistance = distance(currentX, currentY);
+            if (newDistance < bestDistance) {
+                bestDistance = newDistance;
+                bestX = currentX;
+                bestY = currentY;
+            }
+        }
+    }
+}
+
+void calculateHorizontal(char **board, char currentX, char currentY,
+        char badX, char badY,
+        char &bestDistance, char &bestX, char &bestY
+) {
+    for (char x=7; x>currentX; x--) {
+        if (testMove(board, x, currentY, badX, badY)) {
+            char newDistance = distance(x, currentY);
+            if (newDistance < bestDistance) {
+                bestDistance = newDistance;
+                bestX = x;
+                bestY = currentY;
+            }
+
+            break; //dystans już się nie polepszy
+        }
+    }
+}
+
+void calculateVertical(char **board, char currentX, char currentY,
+        char badX, char badY,
+        char &bestDistance, char &bestX, char &bestY
+) {
+    for (char y=7; y>currentY; y--) {
+        if (testMove(board, currentX, y, badX, badY)) {
+            char newDistance = distance(currentX, y);
+            if (newDistance < bestDistance) {
+                bestDistance = newDistance;
+                bestX = currentX;
+                bestY = y;
+            }
+
+            break; //dystans już się nie polepszy
+        }
+    }
+}
+
 /**
- * Sprawdzenie czy dany ruch jest możliwy na plaszny, w tym sprawdzenie poprawności współrzędnych
+ * Sprawdzenie czy dany ruch jest możliwy na planszy, w tym sprawdzenie poprawności współrzędnych
  * Pomijamy punkt badX, badY, ponieważ różny od zera oznacza poprzednio nieudany ruch. A jeśli równy 0,0 to nie interesuje,
  * więc też nieporządany.
  *
