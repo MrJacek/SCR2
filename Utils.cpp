@@ -120,7 +120,6 @@ void writeBoardToBuffor(char** board, char* buffor) {
     }
 }
 
-//gdzieś jest błąd przy wpisywaniu danych, jak się go naprawi to będzie można przemienić x i y w pętli
 void printBoard(char** board, const char* name, char prevX, char prevY, char nextX, char nextY) {
     std::cout << "Thread: " << name << "\nBoard:\n"
         << " |12345678| \n"

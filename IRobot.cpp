@@ -22,8 +22,6 @@ void irobotRun() {
 //        currentX = (char) *(position + 1);
 //    }
 
-
-
     while (distance(currentX, currentY) > 0)
     {
         char** board = getBoard(df);
