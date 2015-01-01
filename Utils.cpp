@@ -126,10 +126,10 @@ void printBoard(char** board, const char* name, char prevX, char prevY, char nex
         << " |12345678| \n"
         << "-+--------+-\n";
 
-    for (int x = 7; x >= 0; x--) {
-        std::cout << (char)((char)x+'A') << '|';
+    for (int y = 7; y >= 0; y--) {
+        std::cout << (char)((char)y+'A') << '|';
 
-        for (int y = 0; y < 8; y++) {
+        for (int x = 0; x < 8; x++) {
             std::string prefix = "";
             std::string sufix = "";
 
@@ -144,7 +144,7 @@ void printBoard(char** board, const char* name, char prevX, char prevY, char nex
             std::cout << prefix << board[y][x] << sufix;        
         }
 
-        std::cout << "|" << (char)((char)x+'A') << "\n";
+        std::cout << "|" << (char)((char)y+'A') << "\n";
     }
 
     std::cout
