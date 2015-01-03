@@ -5,10 +5,12 @@
 #include "Wieza.h"
 
 int main() {
+    srand (time(NULL));
     std::thread env(environmentRun);
     std::thread robot(irobotRun);
 	std::thread rook(wiezaRun);
-    
+    std::thread rook1(wiezaRun);
+
     std::cout << "main, foo and bar now execute concurrently...\n";
 
     // synchronize threads:

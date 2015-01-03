@@ -15,24 +15,27 @@ void wiezaRun(){
 
 	 //pobranie pozycji poczatkowej
     int* position = getInitialPosition(df);
-    currentY = (char) *position + 48;
-    currentX = (char) *(position + 1) + 48;
+    currentY = (char) *position;
+    currentX = (char) *(position + 1);
 
     //na sztywno wieza
     char pawn = PAWN_ROOK;
 
-    while (rookDistance(currentX, currentY) > 0)
+    while (true)
     {
+        sleep(1);
+
         char** board = getBoard(df);
 
         //optymalizacyjnie poprawnie - drugie bez isMove się nie wykona
         bool isMove = rookCalculateMove(board, currentX, currentY, nextX, nextY);
+
         bool accepted = isMove && move(df, currentY+0x30, currentX+0x30, nextY+0x30, nextX+0x30);
 
         if (isMove && accepted) {
             board = getBoard(df);
-            printf("Rook: %c%d -> %c%d\n", currentY + 'A', currentX+1, nextY + 'A', nextX+1);
-            printBoard(board, "Rook", currentX, currentY, nextX, nextY);
+          //  printf("Rook: %c%d -> %c%d\n", currentY + 'A', currentX+1, nextY + 'A', nextX+1);
+
 
             //zaktualizować obecną pozycję
             currentX = nextX;
@@ -44,12 +47,12 @@ void wiezaRun(){
             doNothing++;
 
             if (doNothing % 10 == 0) {
-                printf("Rook: do nothing: %d\n", doNothing);
+            //    printf("Rook: do nothing: %d\n", doNothing);
             }
         }
     }
 
-    std::cout << "Rook: mission complete!\n";
+
 
     return;
 }
@@ -57,19 +60,19 @@ void wiezaRun(){
 bool rookCalculateMove(char **board, char currentX, char currentY, char &nextX, char &nextY) {
     char bestX = 0;
     char bestY = 0;
-    char bestDistance = rookDistance(currentX, currentY);
+    char bestDistance = 5;
 
-	rookCalculateHorizontal(board, currentX, currentY, nextX, nextY, bestDistance, bestX, bestY);
-	rookCalculateVertical(board, currentX, currentY, nextX, nextY, bestDistance, bestX, bestY);
-
-
-    if ((bestX + bestY) != 0) {
-        nextX = bestX;
-        nextY = bestY;
-        return true;
+    int choose=rand()%2;
+    if(choose==0){
+        rookCalculateHorizontal(board, currentX, currentY, nextX, nextY, bestDistance, bestX, bestY);
+    }else{
+        rookCalculateVertical(board, currentX, currentY, nextX, nextY, bestDistance, bestX, bestY);
     }
 
-    return false;
+    nextX = bestX;
+    nextY = bestY;
+
+    return true;
 }
 
 char rookDistance(char x, char y) {
@@ -87,15 +90,13 @@ void rookCalculateHorizontal(char **board, char currentX, char currentY,
         char badX, char badY,
         char &bestDistance, char &bestX, char &bestY
 ) {
-    for (char x=7; x>currentX; x--) {
+    while(true){
+
+        char x=rand()%8;
+        //printf("=======================Random: %d\n",x);
         if (rookTestMove(board, x, currentY, badX, badY)) {
-            char newDistance = rookDistance(x, currentY);
-            if (newDistance < bestDistance) {
-                bestDistance = newDistance;
                 bestX = x;
                 bestY = currentY;
-            }
-
             break; //dystans już się nie polepszy
         }
     }
@@ -105,14 +106,12 @@ void rookCalculateVertical(char **board, char currentX, char currentY,
         char badX, char badY,
         char &bestDistance, char &bestX, char &bestY
 ) {
-    for (char y=7; y>currentY; y--) {
+    while(true){
+        char y=rand()%8;
+
         if (rookTestMove(board, currentX, y, badX, badY)) {
-            char newDistance = rookDistance(currentX, y);
-            if (newDistance < bestDistance) {
-                bestDistance = newDistance;
                 bestX = currentX;
                 bestY = y;
-            }
 
             break; //dystans już się nie polepszy
         }
@@ -120,9 +119,9 @@ void rookCalculateVertical(char **board, char currentX, char currentY,
 }
 
 bool rookTestMove(char **board, char x, char y, char badX, char badY) {
+    //printf("[x=%d,y=%d, board[]=%c",x,y,board[y][x]);
+
     return  x >= 0 && x <= 7
             && y >= 0 && y <= 7
-            && board[y][x] != '0'
-            && x != badX
-            && y != badY;
+            && board[y][x] != '0';
 }

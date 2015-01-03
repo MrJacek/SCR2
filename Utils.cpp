@@ -11,17 +11,17 @@ bool move(int fd, char oldY, char oldX, char axisY, char axisX) {
     buf[2] = oldX;
     buf[3] = axisY;
     buf[4] = axisX;
-    std::cout << "Prepare move request\n";
+ //   std::cout << "Prepare move request\n";
     if (write(fd, buf, 5) != 5) {
         perror("write error");
         exit(-1);
     }
-    std::cout << "Send move request\n";
+ //   std::cout << "Send move request\n";
     if ((rc = read(fd, responseBuf, 1)) > 0) {
-        std::cout << "Receive move request response\n";
+   //     std::cout << "Receive move request response\n";
         return responseBuf[0] == '1';
     }
-    
+
     return false;
 }
 
@@ -45,13 +45,13 @@ int createClient(char type) {
         perror("connect error");
         exit(-1);
     }
-    
+
     //zarejestorwanie z typem
     if (write(fd, &type, 1) != 1) {
         perror("write error");
         exit(-1);
     }
-    
+
     return fd;
 }
 
@@ -63,7 +63,7 @@ int createClient(char type) {
 int* getInitialPosition(int fd) {
     int* responseBuf = new int[2];
     int rc;
-    
+
     if ((rc = read(fd, responseBuf, 2*sizeof(int))) > 0) {
         std::cout << "Client: " << fd << ": " << "Received initial position\n";
         return &responseBuf[0];
@@ -79,14 +79,14 @@ char** getBoard(int fd) {
         board[i] = new char[8];
     }
 
-    std::cout << "Client: " << fd << ": " << "Ask for board: " << fd << "\n";
+ //   std::cout << "Client: " << fd << ": " << "Ask for board: " << fd << "\n";
     if (write(fd, ASK_BOARD, 1) != 1) {
         perror("write error");
         exit(-1);
     }
-    std::cout << "Client: " << fd << ": " << "Wait for board: " << fd << "\n";
+  //  std::cout << "Client: " << fd << ": " << "Wait for board: " << fd << "\n";
     if ((rc = read(fd, buf, 64)) > 0) {
-        std::cout << "Client: " << fd << ": " << "Recive board.\n";
+     //   std::cout << "Client: " << fd << ": " << "Recive board.\n";
         int shift = 0;
         for (int y = 0; y < 8; y++) {
             for (int x = 0; x < 8; x++) {
@@ -107,7 +107,7 @@ char** getBoard(int fd) {
 }
 
 char getPawn(int) {
-    return rdU() % 6;
+    return rand() % 3;
 }
 
 void writeBoardToBuffor(char** board, char* buffor) {
@@ -140,7 +140,7 @@ void printBoard(char** board, const char* name, char prevX, char prevY, char nex
                 sufix = "\e[0m";
             }
 
-            std::cout << prefix << board[y][x] << sufix;        
+            std::cout << prefix << board[y][x] << sufix;
         }
 
         std::cout << "|" << (char)((char)y+'A') << "\n";
@@ -168,5 +168,5 @@ void refresh2() {
 //        //        sleep(1);
 //    }
 //
-//    endwin(); //4 
+//    endwin(); //4
 }

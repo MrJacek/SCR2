@@ -65,7 +65,7 @@ void clientIncomming(int sock) {
     if (read(sock, &type, 1) > 0) {
         std::cout << "Env: " << sock << ": " << "Client type = [" << type << "] registered!\n";
     }
-    
+
     if (type == 'E') {
         //typ enemy
         //losowa pozycja poczatkowa (z wyjatkiem [0,0])
@@ -87,11 +87,11 @@ void clientIncomming(int sock) {
     }
 
     while ((rc = read(sock, buf, sizeof (buf))) > 0) {
-        printf("read %u bytes: %.*s\n", rc, rc, buf);
+       // printf("read %u bytes: %.*s\n", rc, rc, buf);
 
         //pytanie o stan szachownicy - odbrany tylko char B, dwa pozostale bez znaczenia
         if (buf[0] == ASK_BOARD[0]) {
-            std::cout << "Env: " << sock << ": " << "Get board\n";
+        //    std::cout << "Env: " << sock << ": " << "Get board\n";
 
             //odpowiedź - stan szachownicy
             //<!-- CRITICAL SECTION
@@ -99,7 +99,7 @@ void clientIncomming(int sock) {
 
             //przepisanie stanu szachownicy na liniowy bufor
             writeBoardToBuffor(board, boardBuf);
-            std::cout << "Env: " << sock << ": " << boardBuf << "end" << "\n";
+        //    std::cout << "Env: " << sock << ": " << boardBuf << "end" << "\n";
 
             if (write(sock, boardBuf, sizeof (boardBuf)) != sizeof (boardBuf)) {
                 if (64 > 0) fprintf(stderr, "partial write");
@@ -108,7 +108,7 @@ void clientIncomming(int sock) {
                     exit(-1);
                 }
             }
-            std::cout << "Env: " << sock << ": " << "Write board!\n";
+         //   std::cout << "Env: " << sock << ": " << "Write board!\n";
 
             board_state_mutex.unlock();
             //-->
@@ -116,7 +116,7 @@ void clientIncomming(int sock) {
 
         //prosba o ruch - kod operacji M oraz stare i nowe wspolrzedne, np: M1213
         if (buf[0] == 'M') {
-            std::cout << "Env: " << sock << ": " << "Ask for move: [" << buf[1] << "," << buf[2] << "] -> [" << buf[3] << "," << buf[4] << "]\n";
+          //  std::cout << "Env: " << sock << ": " << "Ask for move: [" << buf[1] << "," << buf[2] << "] -> [" << buf[3] << "," << buf[4] << "]\n";
 
             //Konwersja char na int i sanity check
             int oldY = ((int) buf[1]) - 48;
@@ -152,10 +152,10 @@ void clientIncomming(int sock) {
             //-->
 
             if (!badCoord && accepted) {
-                std::cout << "Env: " << sock << ": " << "Move accepted\n";
+         //       std::cout << "Env: " << sock << ": " << "Move accepted\n";
                 status = MOVE_ACCEPTED;
             } else {
-                std::cout << "Env: " << sock << ": " << "Move denied\n";
+       //         std::cout << "Env: " << sock << ": " << "Move denied\n";
             }
 
             //zwrocenie odpowiedzi
@@ -183,13 +183,13 @@ void clientIncomming(int sock) {
  * @return true jeżeli jest, false w p.p.
  */
 bool moveAccepted(int sourceX, int sourceY, int targetX, int targetY) {
-    std::cout << "Checking move: [" << sourceY << "," << sourceX << "] -> [" << targetY << "," << targetX << "]\n";
-
+ //   std::cout << "Checking move: [" << sourceY << "," << sourceX << "] -> [" << targetY << "," << targetX << "]\n";
+    printBoard(board, "Env", sourceX, sourceY, targetX, targetY);
     if (board[sourceY][sourceX] != '0') {
         perror("Na zrodlowym polu brak figury!\n");
         return false;
     }
-    
+
     //Ruch możliwy jeżeli na danym polu nic nie stoi - wartość = 1
     if (board[targetY][targetX] == '1') {
         //to pole od teraz jest zajete
@@ -207,24 +207,24 @@ bool moveAccepted(int sourceX, int sourceY, int targetX, int targetY) {
  * Wygeneruje pozycje startową dla klienta.
  * Pozycja nie może być (0,0) - tam startuje robot.
  * Generowane pozycje naniesiona na mape szachownicy.
- * 
+ *
  * @param array tablica do wypelnienia
  */
 void randomInitialPosition(int array[]) {
     int startX = 0;
     int startY = 0;
-    
+
     //<!-- CRITICAL SECTION
     board_state_mutex.lock();
     while (startX == 0 || board[startY][startX] == '0') {
         startX = dis(gen);
         startY = dis(gen);
     }
-    
+
     board[startY][startX] = '0';
     board_state_mutex.unlock();
     //-->
-    
+
     array[0] = startY;
     array[1] = startX;
 }

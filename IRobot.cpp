@@ -3,6 +3,7 @@
 
 //tutaj ta tablica bo w utills.c miałem błąd z duplikacją, pewnie chodzi o dołączanie plików, mniejsza o to
 const char* PAWNS[]={"King", "Queen", "Rook", "Bishop", "Knight", "Pawn"};
+const char  SOUL[]={PAWN_KING,PAWN_KNIGHT,PAWN_PAWN};
 
 void irobotRun() {
     sleep(1);
@@ -11,10 +12,10 @@ void irobotRun() {
     char nextX = 0;
     char nextY = 0;
     int doNothing = 0; //poselski licznik nic nierobienia
-    
+
     //utworzenie polaczenia z srodowiskiem
     int df = createClient(TYPE_HERO);
-    
+
 //    //pobranie pozycji poczatkowej
 //    if (type == TYPE_ENEMY) {
 //        int* position = getInitialPosition(df);
@@ -24,8 +25,11 @@ void irobotRun() {
 
     while (distance(currentX, currentY) > 0)
     {
+        sleep(1);
         char** board = getBoard(df);
-        char pawn = getPawn(df);        
+        char pawn =getPawn(df);
+        pawn=SOUL[(int)pawn];
+
 
         //optymalizacyjnie poprawnie - drugie bez isMove się nie wykona
         bool isMove = calculateMove(board, pawn, currentX, currentY, nextX, nextY);
@@ -33,8 +37,8 @@ void irobotRun() {
 
         if (isMove && accepted) {
             board = getBoard(df);
-            printf("iRobot: Like %s: %c%d -> %c%d\n", PAWNS[pawn], currentY + 'A', currentX+1, nextY + 'A', nextX+1);
-            printBoard(board, "IRobot", currentX, currentY, nextX, nextY);
+            //printf("iRobot: Like %s: %c%d -> %c%d\n", PAWNS[pawn], currentY + 'A', currentX+1, nextY + 'A', nextX+1);
+
 
             //zaktualizować obecną pozycję
             currentX = nextX;
@@ -46,21 +50,20 @@ void irobotRun() {
             doNothing++;
 
             if (doNothing % 10 == 0) {
-                printf("iRobot: do nothing: %d\n", doNothing);
+              //  printf("iRobot: do nothing: %d\n", doNothing);
             }
         }
     }
 
     std::cout << "iRobot: mission complete!\n";
-  
-    return;
+    exit(0);
 }
 
 /**
  * Obliczenie dystansu do punktu docelowego. Im mniej tym lepiej.
- * 
+ *
  * współrzędne w zakresie 0-7 (cyfrowo, nie analogowo)
- *  
+ *
  */
 char distance(char x, char y) {
     if (x < 0 || x > 7
@@ -102,18 +105,18 @@ bool calculateMove(char **board, char pawn, char currentX, char currentY, char &
                 bestY = currentY;
             }
             break;
-        case PAWN_QUEEN:
+        /**case PAWN_QUEEN:
             calculateDiagonal(board, currentX, currentY, nextX, nextY, bestDistance, bestX, bestY);
             calculateHorizontal(board, currentX, currentY, nextX, nextY, bestDistance, bestX, bestY);
             calculateVertical(board, currentX, currentY, nextX, nextY, bestDistance, bestX, bestY);
-            break;
-        case PAWN_ROOK:
+            break;**/
+        /**case PAWN_ROOK:
             calculateHorizontal(board, currentX, currentY, nextX, nextY, bestDistance, bestX, bestY);
             calculateVertical(board, currentX, currentY, nextX, nextY, bestDistance, bestX, bestY);
-            break;
-        case PAWN_BISHOP:
+            break;**/
+        /**case PAWN_BISHOP:
             calculateDiagonal(board, currentX, currentY, nextX, nextY, bestDistance, bestX, bestY);
-            break;
+            break;**/
         case PAWN_KNIGHT:
             //tylko dwa skoki konia mogą polepszyć sprawę
             if (testMove(board, currentX+2, currentY+1, nextX, nextY)) {
