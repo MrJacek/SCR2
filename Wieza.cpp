@@ -1,3 +1,4 @@
+#include "Utils.h"
 #include "Wieza.h"
 
 void wiezaRun(){
@@ -7,23 +8,30 @@ void wiezaRun(){
     char nextX = 0;
     char nextY = 0;
     int doNothing = 0; //poselski licznik nic nierobienia
-    
+
 	//utworzenie polaczenia z srodowiskiem
-    int df = createClient(PAWN_ROOK);
+    int df = createClient(TYPE_ENEMY);
 	printf("Hello from ROOK");
 
-    while (distance(currentX, currentY) > 0)
+	 //pobranie pozycji poczatkowej
+    int* position = getInitialPosition(df);
+    currentY = (char) *position + 48;
+    currentX = (char) *(position + 1) + 48;
+
+    //na sztywno wieza
+    char pawn = PAWN_ROOK;
+
+    while (rookDistance(currentX, currentY) > 0)
     {
         char** board = getBoard(df);
-        char pawn = getPawn(df);
-		
+
         //optymalizacyjnie poprawnie - drugie bez isMove się nie wykona
-        bool isMove = calculateMove(board, pawn, currentX, currentY, nextX, nextY);
+        bool isMove = rookCalculateMove(board, currentX, currentY, nextX, nextY);
         bool accepted = isMove && move(df, currentY+0x30, currentX+0x30, nextY+0x30, nextX+0x30);
 
         if (isMove && accepted) {
             board = getBoard(df);
-            printf("Pawn: Like %s: %c%d -> %c%d\n", PAWNS[pawn], currentY + 'A', currentX+1, nextY + 'A', nextX+1);
+            printf("Rook: %c%d -> %c%d\n", currentY + 'A', currentX+1, nextY + 'A', nextX+1);
             printBoard(board, "Rook", currentX, currentY, nextX, nextY);
 
             //zaktualizować obecną pozycję
@@ -42,21 +50,19 @@ void wiezaRun(){
     }
 
     std::cout << "Rook: mission complete!\n";
-  
+
     return;
 }
 
-
-
-bool calculateMove(char **board, char currentX, char currentY, char &nextX, char &nextY) {
+bool rookCalculateMove(char **board, char currentX, char currentY, char &nextX, char &nextY) {
     char bestX = 0;
     char bestY = 0;
-    char bestDistance = distance(currentX, currentY);
-	
-	calculateHorizontal(board, currentX, currentY, nextX, nextY, bestDistance, bestX, bestY);
-	calculateVertical(board, currentX, currentY, nextX, nextY, bestDistance, bestX, bestY);
-    
-	
+    char bestDistance = rookDistance(currentX, currentY);
+
+	rookCalculateHorizontal(board, currentX, currentY, nextX, nextY, bestDistance, bestX, bestY);
+	rookCalculateVertical(board, currentX, currentY, nextX, nextY, bestDistance, bestX, bestY);
+
+
     if ((bestX + bestY) != 0) {
         nextX = bestX;
         nextY = bestY;
@@ -66,7 +72,7 @@ bool calculateMove(char **board, char currentX, char currentY, char &nextX, char
     return false;
 }
 
-char distance(char x, char y) {
+char rookDistance(char x, char y) {
     if (x < 0 || x > 7
         || y < 0 || y > 7
     ) {
@@ -77,13 +83,13 @@ char distance(char x, char y) {
     return 14 - x - y; //7,7 - górny lewy róg
 }
 
-void calculateHorizontal(char **board, char currentX, char currentY,
+void rookCalculateHorizontal(char **board, char currentX, char currentY,
         char badX, char badY,
         char &bestDistance, char &bestX, char &bestY
 ) {
     for (char x=7; x>currentX; x--) {
-        if (testMove(board, x, currentY, badX, badY)) {
-            char newDistance = distance(x, currentY);
+        if (rookTestMove(board, x, currentY, badX, badY)) {
+            char newDistance = rookDistance(x, currentY);
             if (newDistance < bestDistance) {
                 bestDistance = newDistance;
                 bestX = x;
@@ -95,13 +101,13 @@ void calculateHorizontal(char **board, char currentX, char currentY,
     }
 }
 
-void calculateVertical(char **board, char currentX, char currentY,
+void rookCalculateVertical(char **board, char currentX, char currentY,
         char badX, char badY,
         char &bestDistance, char &bestX, char &bestY
 ) {
     for (char y=7; y>currentY; y--) {
-        if (testMove(board, currentX, y, badX, badY)) {
-            char newDistance = distance(currentX, y);
+        if (rookTestMove(board, currentX, y, badX, badY)) {
+            char newDistance = rookDistance(currentX, y);
             if (newDistance < bestDistance) {
                 bestDistance = newDistance;
                 bestX = currentX;
@@ -113,7 +119,7 @@ void calculateVertical(char **board, char currentX, char currentY,
     }
 }
 
-bool testMove(char **board, char x, char y, char badX, char badY) {
+bool rookTestMove(char **board, char x, char y, char badX, char badY) {
     return  x >= 0 && x <= 7
             && y >= 0 && y <= 7
             && board[y][x] != '0'
